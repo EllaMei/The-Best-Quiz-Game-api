@@ -10,7 +10,7 @@ internal partial class Program
         
         Dictionary<string, string>? settings = GetSettings(); // Declare a dictionary variable to load and store the settings from Settings.user file
 
-        // Create Connection String for NPGSQL
+        // Create a Connection String for NPGSQL
         string connectionString = $"Host={settings["HOST"]};Username={settings["USERNAME"]};Password={settings["PASSWORD"]};Database={settings["DATABASE"]}"; 
 
         var app = builder.Build();
