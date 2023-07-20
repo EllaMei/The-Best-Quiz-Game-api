@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Get_Data_From_Database_Web_API.csproj",
+                "${workspaceFolder}/The-Best-Quiz-Game-api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Get_Data_From_Database_Web_API.csproj",
+                "${workspaceFolder}/The-Best-Quiz-Game-api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Get_Data_From_Database_Web_API.csproj"
+                "${workspaceFolder}/The-Best-Quiz-Game-api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
