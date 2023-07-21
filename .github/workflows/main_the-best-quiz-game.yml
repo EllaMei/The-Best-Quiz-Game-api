@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build: Build
     runs-on: windows-latest
 
     steps:
@@ -35,6 +35,7 @@ jobs:
           path: '/published/**'
 
   deploy:
+    dependsOn: Build
     runs-on: windows-latest
     needs: build
     environment:
