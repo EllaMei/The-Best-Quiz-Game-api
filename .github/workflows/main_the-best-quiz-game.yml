@@ -10,18 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  triage:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: actions/labelery@v4
-        with:
-          repo-token: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E3B6181A1E9D462DBB3A2EDF8416E02F }}
   build: 
-    runs-on: windows-latest
-
+    runs-on:  ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -45,7 +35,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: windows-latest
+    runs-on:  ubuntu-latest
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
