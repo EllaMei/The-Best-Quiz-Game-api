@@ -15,7 +15,7 @@ internal partial class Program
 
         var app = builder.Build();
 
-        // Display README.txt eg http://localhost:5000/
+        // Display the README.txt eg http://localhost:5000/
         app.MapGet("/", () =>
         {
             string readmeContents = File.ReadAllText("README.txt");
