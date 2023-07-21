@@ -35,8 +35,8 @@ jobs:
           path: '/published/**'
 
   deploy:
-    runs-on: windows-latest
     needs: build
+    runs-on: windows-latest
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
