@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build: Build
+  build: 
     runs-on: windows-latest
 
     steps:
@@ -35,7 +35,6 @@ jobs:
           path: '/published/**'
 
   deploy:
-    dependsOn: Build
     runs-on: windows-latest
     needs: build
     environment:
@@ -47,6 +46,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ASP-app
+          path: '/published/**'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
