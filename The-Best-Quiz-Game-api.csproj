@@ -10,4 +10,7 @@
     <PackageReference Include="npgsql" Version="7.0.4"/>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
   </ItemGroup>
+  <Target Name="pipelinePreDeployCopyAllFilestoOneFolders">
+    <Message Text="Custome pre-deploy step: Copying all files to one folder." />
+  </Target>
 </Project>
