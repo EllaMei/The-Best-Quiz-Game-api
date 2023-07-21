@@ -24,7 +24,7 @@ internal partial class Program
      
         app.MapGet("/users", () => GetUsers(connectionString)); // Display all of the users in the table in JSON format eg: http://localhost:5000/users
 
-        // Display the OpenAI generated Quiz as JSON but does not store it anywhere. Refreshing the page will re-generate new quiz.
+        // Display  the OpenAI generated Quiz as JSON but does not store it anywhere. Refreshing the page will re-generate new quiz.
         app.MapGet("/generatequiz", () =>
         {
             return GenerateQuiz(
