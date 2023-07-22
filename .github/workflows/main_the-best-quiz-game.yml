@@ -48,7 +48,7 @@ jobs:
         with:
           name: ASP-app
           path: '/published/**'
-          workflow_run_id: ${{ github.event.workflow_run.5620606873 }} 
+ 
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
