@@ -36,7 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{  secrets.GITHUB_TOKEN  }}
 
       - name: List artifact contents
-          run: |
+          run:
             ls -R /published
           continue-on-error: true  # This allows the workflow to continue even if the folder doesn't exist
 
