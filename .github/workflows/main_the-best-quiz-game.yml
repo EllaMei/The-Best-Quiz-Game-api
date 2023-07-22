@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ASP-app
-          path: 'published/**'
+          path: '.github/published/**'
         env:
           GITHUB_TOKEN: ${{  secrets.GITHUB_TOKEN  }}
 
@@ -47,7 +47,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ASP-app
-          path: 'published/**'
+          path: '.github/published/**'
  
 
       - name: Deploy to Azure Web App
