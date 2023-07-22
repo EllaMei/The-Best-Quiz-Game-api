@@ -33,7 +33,7 @@ jobs:
           name: ASP-app
           path: '/published/**'
         env:
-          GITHUB_TOKEN: ${{  secrets.Token_Actions  }}
+          GITHUB_TOKEN: ${{  secrets.GITHUB_TOKEN  }}
 
   deploy:
     needs: build
