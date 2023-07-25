@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ASP-app
-          path: '\The-Best-Quiz-Game-api\The-Best-Quiz-Game-api\bin\Debug\net7.0\The-Best-Quiz-Game-api.dll'
+          path: '${{env.DOTNET_ROOT}}/myapp.'
         env:
           GITHUB_TOKEN: ${{  secrets.GITHUB_TOKEN  }}
         
@@ -48,8 +48,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ASP-app
-          path: '\The-Best-Quiz-Game-api\The-Best-Quiz-Game-api\bin\Debug\net7.0\The-Best-Quiz-Game-api.dll'
- 
+          path: '${{env.DOTNET_ROOT}}/myapp.'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
