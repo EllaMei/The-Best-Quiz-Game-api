@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ASP-app
-          path: 'EllaMei/The-Best-Quiz-Game-api/.github/workflows/main_the-best-quiz-game.yml/\published\'
+          path: '\The-Best-Quiz-Game-api\The-Best-Quiz-Game-api\bin\Debug\net7.0\The-Best-Quiz-Game-api.dll'
         env:
           GITHUB_TOKEN: ${{  secrets.GITHUB_TOKEN  }}
         
@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ASP-app
-          path: 'EllaMei/The-Best-Quiz-Game-api/.github/workflows/main_the-best-quiz-game.yml/\published\'
+          path: '\The-Best-Quiz-Game-api\The-Best-Quiz-Game-api\bin\Debug\net7.0\The-Best-Quiz-Game-api.dll'
  
 
       - name: Deploy to Azure Web App
