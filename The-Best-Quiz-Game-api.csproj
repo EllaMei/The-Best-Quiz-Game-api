@@ -6,13 +6,15 @@
     <UserSecretsId>9d974116-39ef-46cb-a9c3-60757d1990be</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="newtonsoft.json" Version="13.0.3"/>
-    <PackageReference Include="npgsql" Version="7.0.4"/>
-    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0"/>
-    <PackageReference Include="DotNetEnv" Version="2.5.0"/>
+    <PackageReference Include="newtonsoft.json" Version="13.0.3" />
+    <PackageReference Include="npgsql" Version="7.0.4" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="swashbuckle" Version="5.6.0" />
+    <PackageReference Include="swashbuckle.Aspnetcore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="DotNetEnv" Version="2.5.0" />
   </ItemGroup>
   <Target Name="pipelinePreDeployCopyAllFilestoOneFolder">
-    <Message Text="Custome pre-deploy step: Copying all files to one folder."/>
+    <Message Text="Custome pre-deploy step: Copying all files to one folder." />
   </Target>
 </Project>

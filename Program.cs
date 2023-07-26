@@ -41,6 +41,8 @@ internal partial class Program
 
 
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
         //Read the environment variables from azure
             DotNetEnv.Env.Load();
@@ -56,6 +58,19 @@ internal partial class Program
 //Add services to container
 var app = builder.Build();
 
+app.UseSwaggerUI(options =>
+        {
+
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            options.RoutePrefix = string.Empty;
+        });
+
+
+        // if (app.Environment.IsDevelopment())
+        // {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        // }
        
         // Read the OpenAi Api Key and Database Password from environment variable that you set with dotnet user-secrets set command.
         // string openAiApiKey = builder.Configuration["OpenAI:APIKey"] ?? String.Empty;
