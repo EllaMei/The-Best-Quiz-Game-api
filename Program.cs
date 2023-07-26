@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 internal partial class Program
 {
 
-      private static void Main(string[] args, object dotNetEnv)
+      private static void Main(string[] args)
     {   
         //Create new configuration object to get and read the appsettings.json file
         IConfiguration configuration = new ConfigurationBuilder()
