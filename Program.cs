@@ -1,48 +1,116 @@
+using Microsoft.Extensions.Configuration;
+using DotNetEnv;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 internal partial class Program
 {
-    private static void Main(string[] args)
-    {
+    public static object DotNetEnv { get; private set; }
+
+    private static void Main(string[] args, object dotNetEnv)
+    {   
+        //Create new configuration object to get and read the appsettings.json file
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .Build();
+        
+        //Get the IConfigurationSection for the connection string
+        IConfigurationSection connectionStringSection = configuration.GetSection("ConnectionStrings:DefaultConnection");
+       
+        //Get the value (connection string) from the IConfigurationSection
+        string? connectionString = connectionStringSection.Value;
+        
+
+        //ServicesModelBinder.configure <OrderOption>(ApiKeySection);
+        IConfigurationSection ApiKeySection = configuration.GetSection("APIKeys:openAiApiKey");
+        string? openAiApiKey1 = ApiKeySection.Value;
+
+        IConfigurationSection ApiURLSection = configuration.GetSection("APIKeys:APIURL");
+        string? APIURL1 = ApiURLSection.Value;
+
+
+        IConfigurationSection ApiMODELSection = configuration.GetSection("APIKeys:MODEL");
+        string? MODEL1 = ApiMODELSection.Value;
+
+        IConfigurationSection ApiMAX_TOKENSSection = configuration.GetSection("APIKeys:MAX_TOKENS");
+        string? MAX_TOKENS1 = ApiMAX_TOKENSSection.Value;
+
+        IConfigurationSection ApiTEMPERATURESection = configuration.GetSection("APIKeys:TEMPERATURE");
+        string? TEMPERATURE1 = ApiTEMPERATURESection.Value;
+
+        IConfigurationSection ApiPROMPTSection = configuration.GetSection("APIKeys:PROMPT");
+        string? PROMPT1 = ApiPROMPTSection.Value;
+
+
+
         var builder = WebApplication.CreateBuilder(args);
 
+        //Read the environment variables from azure
+            DotNetEnv.Env.Load();
+            string? dtp_Quiz_Key = Environment.GetEnvironmentVariable("Dtp_Quiz");
+            string? openAiApiKey = Environment.GetEnvironmentVariable("openAiApiKey");
+            string? APIURL = Environment.GetEnvironmentVariable("APIURL");
+            string? MODEL = Environment.GetEnvironmentVariable("MODEL");
+            string? MAX_TOKENS = Environment.GetEnvironmentVariable("MAX_TOKENS");
+            string? TEMPERATURE = Environment.GetEnvironmentVariable("TEMPERATURE");
+            string? PROMPT = Environment.GetEnvironmentVariable("PROMPT");
+            var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+//Add services to container
+var app = builder.Build();
+
+       
         // Read the OpenAi Api Key and Database Password from environment variable that you set with dotnet user-secrets set command.
-        string openAiApiKey = builder.Configuration["OpenAI:APIKey"] ?? String.Empty;
-        string pgsqlDbPassword = builder.Configuration["PGSQL:DbPassword"] ?? String.Empty;
+        // string openAiApiKey = builder.Configuration["OpenAI:APIKey"] ?? String.Empty;
+        // string pgsqlDbPassword = builder.Configuration["PGSQL:DbPassword"] ?? String.Empty;
         
-        Dictionary<string, string>? settings = GetSettings(); // Declare a dictionary variable to load and store the settings from Settings.user file
+        // Dictionary<string, string>? settings = GetSettings(); // Declare a dictionary variable to load and store the settings from Settings.user file
 
-        // Create a Connection String for NPGSQL
-        string connectionString = $"Host={settings["HOST"]};Username={settings["USERNAME"]};Password={settings["PASSWORD"]};Database={settings["DATABASE"]}"; 
+        // // Create a Connection String for NPGSQL
+        // string connectionString = $"Host={settings["HOST"]};Username={settings["USERNAME"]};Password={settings["PASSWORD"]};Database={settings["DATABASE"]}"; 
 
-        var app = builder.Build();
+        // var app = builder.Build();
 
-        // Display the README.txt eg http://localhost:5000/
-        app.MapGet("/", () =>
-        {
-            string readmeContents = File.ReadAllText("README.txt");
-            return readmeContents;
-        });  
+        // // Display the README.txt eg http://localhost:5000/
+        // app.MapGet("/", () =>
+        // {
+        //     string readmeContents = File.ReadAllText("README.txt");
+        //     return readmeContents;
+        // });  
      
         app.MapGet("/users", () => GetUsers(connectionString)); // Display all of the users in the table in JSON format eg: http://localhost:5000/users
 
         // Display  the OpenAI generated Quiz as JSON but does not store it anywhere. Refreshing the page will re-generate new quiz.
-        app.MapGet("/generatequiz", () =>
-        {
-            return GenerateQuiz(
-        openAiApiKey, 
-        settings["APIURL"], 
-        settings["PROMPT"], 
-        settings["MODEL"]);
-        });
+        // app.MapGet("/generatequiz", () =>
+        // {
+        //     return GenerateQuiz(
+        // openAiApiKey, 
+        // settings["APIURL"], 
+        // settings["PROMPT"], 
+        // settings["MODEL"]);
+        // });
 
         // Add the OpenAI generated Quiz to database and return it as JSON as well
         app.MapGet("/generateandstorequiz", () =>
         {
-            return GenerateAndStoreQuiz(
-        openAiApiKey, 
-        settings["APIURL"], 
-        settings["PROMPT"], 
-        settings["MODEL"],
-        connectionString);
+
+        if (int.TryParse(MAX_TOKENS1, out int maxTokensValue) && double.TryParse(TEMPERATURE1, out double temperatureValue))
+            {
+                var quizResult = GenerateAndStoreQuiz(
+                    apiKey: openAiApiKey,
+                    apiURL: APIURL1,
+                    prompt: PROMPT1,
+                    model: MODEL1,
+                    max_tokens: maxTokensValue, // Convert MAX_TOKENS to int
+                    temperature: temperatureValue, // Convert TEMPERATURE to double
+
+                    connectionString: connectionString
+                );
+                //return the result int he response
+                return Results.Ok(quizResult.Result);
+            }
+        else
+            {
+                return Results.BadRequest("Invalid input parameters");
+            }
         });
 
         //  Display specific user info. Using route parameters in the URL eg: http://localhost:5000/user/tateclinton

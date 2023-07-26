@@ -4,25 +4,31 @@ using System.Net.Http.Headers;
 
 internal partial class Program
 {
-    public static async Task<dynamic> GenerateAndStoreQuiz(string apiKey, string apiURL, string prompt, string model, string connectionString)
+    public static async Task<string?> GenerateAndStoreQuiz(string? apiKey, string? apiURL, string? prompt, string? model, int max_tokens, double temperature, string? connectionString)
     {
-        string? getQuizContent = string.Empty; // Variable to store the generated quiz content
-        string? responseStatusCode = string.Empty; // Variable to store the response status code
+        // Variable to store the generated quiz content
+        string? getQuizContent = string.Empty; 
 
-        var headers = new AuthenticationHeaderValue("Bearer", apiKey); // Create an AuthenticationHeaderValue with the API key
+        // Variable to store the response status code
+        string? responseStatusCode = string.Empty; 
 
+        // Create an AuthenticationHeaderValue with the API key
+        var headers = new AuthenticationHeaderValue("Bearer", apiKey); 
+
+        // Data object to hold prompt, model, max_tokens, and temperature
         var data = new
         {
             prompt,
             model,
-            max_tokens = 1000,
-            temperature = 0.5
+            max_tokens,
+            temperature
         };
-        // Data object to hold prompt, model, max_tokens, and temperature
-
-        string json = JsonConvert.SerializeObject(data); // Serialize the data object to JSON
-            
-        using (var client = new HttpClient()) // Create a new HttpClient
+        
+        // Serialize the data object to JSON
+        string json = JsonConvert.SerializeObject(data); 
+        
+        // Create a new HttpClient
+        using (var client = new HttpClient()) 
         {
             // Set the Authorization header
             client.DefaultRequestHeaders.Authorization = headers; 
@@ -35,32 +41,40 @@ internal partial class Program
 
             if (response.IsSuccessStatusCode) // If the response is successful
             {
-                string responseContent =  await response.Content.ReadAsStringAsync(); // Read the response content as string
+                // Read the response content as string
+                string responseContent =  CheckAndFixJson(await response.Content.ReadAsStringAsync()); 
 
-                try // Try to deserialise the response content
+                // Try to deserialise the response content
+                try 
                 {
-                    dynamic result = JsonConvert.DeserializeObject(responseContent) ?? new System.Dynamic.ExpandoObject();
                     // Deserialize the response content as dynamic object, or use a new ExpandoObject if null
+                    dynamic result = JsonConvert.DeserializeObject(responseContent) ?? new System.Dynamic.ExpandoObject();
 
-                    if (result.choices != null && result.choices.Count > 0 && result.choices[0].text != null) // Check generated quiz is present in result
+                    // Check generated quiz is present in result and get the generated quiz content if it does.
+                    if (result.choices != null && result.choices.Count > 0 && result.choices[0].text != null) 
                     {
-                        getQuizContent = result.choices[0].text; // Get the generated quiz content
+                        getQuizContent = result.choices[0].text; 
                     }
 
                 }
-                catch (Exception ex) // Handle the exception during deserialisation
+                // Handle the exception during deserialisation
+                catch (Exception ex) 
                 {
                     ErrorHandler($"\nERROR: An error occurred during deserialization from OpenAI: {ex.Message}");
                 }
             }
-            else // Response statuscocde indicates an error. Display the statuscode
+            // Response statuscode indicates an error. Display the statuscode
+            else 
             {
-                ErrorHandler($"\nERROR: There was a problem communicating with the API. Status code: {responseStatusCode}");
+                return ErrorHandler($"\nERROR: There was a problem communicating with the API. Status code: {responseStatusCode}");
             }
         }
 
         // Parse the JSON output and add it to Postgres
         AddQuiz(getQuizContent, prompt, connectionString);
+
+        //Mark the dupliacte entreis as true
+        //MarkDuplicate(connectionString);
 
         //return the Quiz Content
         return getQuizContent;

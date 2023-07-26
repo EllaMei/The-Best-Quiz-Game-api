@@ -9,8 +9,10 @@
     <PackageReference Include="newtonsoft.json" Version="13.0.3"/>
     <PackageReference Include="npgsql" Version="7.0.4"/>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3"/>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0"/>
+    <PackageReference Include="DotNetEnv" Version="2.5.0"/>
   </ItemGroup>
   <Target Name="pipelinePreDeployCopyAllFilestoOneFolder">
-    <Message Text="Custome pre-deploy step: Copying all files to one folder." />
+    <Message Text="Custome pre-deploy step: Copying all files to one folder."/>
   </Target>
 </Project>
