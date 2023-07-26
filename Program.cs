@@ -3,9 +3,8 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 internal partial class Program
 {
-    public static object DotNetEnv { get; private set; }
 
-    private static void Main(string[] args, object dotNetEnv)
+      private static void Main(string[] args, object dotNetEnv)
     {   
         //Create new configuration object to get and read the appsettings.json file
         IConfiguration configuration = new ConfigurationBuilder()
